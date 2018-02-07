@@ -8,3 +8,6 @@ def au_to_km(au):
 def km_to_au(km):
     return km / KM_PER_AU
 
+
+def day_to_sec(day):
+    return day * 86400
