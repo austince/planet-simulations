@@ -32,5 +32,6 @@ def main():
     sim.run()
     cprint('Simulation done.', 'green')
 
+
 if __name__ == '__main__':
     main()
