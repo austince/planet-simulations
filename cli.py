@@ -2,12 +2,10 @@
 The command line interface
 """
 import argparse
-import os
-import sys
 from termcolor import cprint
 
-from euler import Simulation
-from conversions import au_to_km, day_to_sec
+from simulations.euler import Simulation
+from simulations.conversions import au_to_km, day_to_sec
 
 __version__ = '1.0.0'
 
@@ -59,6 +57,13 @@ def main():
                         help='CSV file to write results to.',
                         type=str,
                         required=True,
+                        )
+
+    parser.add_argument('-m', '--method',
+                        help='Method for the simulation.',
+                        choices=['euler', 'e', 'rk2', 'rk4'],
+                        default='euler',
+                        type=str
                         )
 
     args = parser.parse_args()

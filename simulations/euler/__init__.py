@@ -1,28 +1,7 @@
 from csv import DictWriter
 import numpy as np
 
-G = 6.67 * (10 ** -11)  # m^3 kg^-1 s^-2
-MASS_SUN = 1.989 * (10 ** 30)  # kg
-
-
-def acceleration(pos_i, r_i):
-    return pos_i * (-G * MASS_SUN / (r_i ** 3))
-
-
-def velocity(v_i, a_i, dt):
-    return v_i + (a_i * dt)
-
-
-def position(pos_i, v_i, a_i, dt):
-    return pos_i + (v_i * dt) + (0.5 * a_i * (dt ** 2))
-
-
-def radius(pos_i):
-    return np.sqrt(np.sum(np.square(pos_i)))
-
-
-def total_energy(v_i, r_i):
-    return 0.5 * (np.sqrt(v_i.dot(v_i)) ** 2) - (G * MASS_SUN / r_i)
+from ..simple_motion import acceleration, velocity, position, radius, total_energy
 
 
 class Simulation:
