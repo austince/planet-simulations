@@ -50,10 +50,10 @@ class RKSimulation(Simulation):
         # Hardcode order weights for now
         # will do n-th order sometime maybe
         if k == 2:
-            self.sum_weights = [1, 1]
+            self.sum_weights = np.array([1, 1])[:, np.newaxis]
             self.sum_coeff = 1 / 2
         elif k == 4:
-            self.sum_weights = [1, 2, 2, 1]
+            self.sum_weights = np.array([1, 2, 2, 1])[:, np.newaxis]
             self.sum_coeff = 1 / 6
 
     def run(self, outfile):
