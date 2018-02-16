@@ -51,6 +51,7 @@ class RKSimulation(Simulation):
             k_vel_arr = np.ndarray(shape=(self.k, 2))  # x and y direction
             k_pos_arr = np.ndarray(shape=(self.k, 2))  # x and y direction
             k_pos, k_vel = self.position, self.velocity
+
             for i in range(self.k):
                 k_pos_next, k_vel_next = calc_k(k_pos, k_vel, self.dt)
                 k_pos_arr[i] = k_pos_next

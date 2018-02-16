@@ -149,6 +149,7 @@ def main():
         # polar plot
         polar_ax = plt.subplot(111, projection='polar')
         polar_ax.plot(theta, r)
+        polar_ax.set_rmin(np.min(r))
         polar_ax.set_rmax(np.max(r))
         polar_ax.grid(True)
         polar_ax.set_title(title)
@@ -158,8 +159,9 @@ def main():
         # cart_ax = plt.subplot(111)
         # cart_ax.plot(x, y)
         # cart_ax.set_title(title)
-        # cart_ax.xlabel('X position')
-        # cart_ax.ylabel('Y position')
+        # cart_ax.set_xlabel('X position')
+        # cart_ax.set_ylabel('Y position')
+        # cart_ax.grid(True)
         # cart_ax.axis([np.min(x), np.max(x), np.min(y), np.max(y)])
 
         plt.show()
