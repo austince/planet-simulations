@@ -31,19 +31,19 @@ class RKSimulation(Simulation):
         'v_y',
     ]
 
-    def __init__(self, x0, y0, vx0, vy0, dt, end_time, k=2):
+    def __init__(self, x0, y0, vx0, vy0, dt, end_time, order=2):
         self.position = np.array([x0, y0])
         self.velocity = np.array([vx0, vy0])
         self.dt = dt
         self.end_time = end_time
-        self.k = k
+        self.order = order
         self.time = 0
         # Hardcode order weights for now
         # will do n-th order sometime maybe
-        if k == 2:
+        if order == 2:
             self.sum_weights = np.array([1, 1])[:, np.newaxis]
             self.sum_coeff = 1 / 2
-        elif k == 4:
+        elif order == 4:
             self.sum_weights = np.array([1, 2, 2, 1])[:, np.newaxis]
             self.sum_coeff = 1 / 6
 
@@ -53,11 +53,11 @@ class RKSimulation(Simulation):
         while self.time < self.end_time:
             self.time += self.dt
 
-            k_vel_arr = np.ndarray(shape=(self.k, 2))  # x and y direction
-            k_pos_arr = np.ndarray(shape=(self.k, 2))  # x and y direction
+            k_vel_arr = np.ndarray(shape=(self.order, 2))  # x and y direction
+            k_pos_arr = np.ndarray(shape=(self.order, 2))  # x and y direction
             k_pos, k_vel = self.position, self.velocity
 
-            for i in range(self.k):
+            for i in range(self.order):
                 k_pos_next, k_vel_next = calc_k(k_pos, k_vel, self.dt)
                 k_pos_arr[i] = k_pos_next
                 k_vel_arr[i] = k_vel_next

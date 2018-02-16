@@ -116,7 +116,7 @@ def main():
             args.vy0 * 1000,
             day_to_sec(args.dt),
             day_to_sec(args.end_time),
-            k=2,
+            order=2,
         )
     elif args.method == 'rk4':
         sim = RKSimulation(
@@ -126,7 +126,7 @@ def main():
             args.vy0 * 1000,
             day_to_sec(args.dt),
             day_to_sec(args.end_time),
-            k=4,
+            order=4,
         )
 
     sim.run(args.output)
