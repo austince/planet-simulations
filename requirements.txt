@@ -1,0 +1,11 @@
+certifi==2018.1.18
+cycler==0.10.0
+matplotlib==2.1.2
+numpy==1.14.0
+powerline-status===2.6.dev9999-git.b-a4a1c8353924959188d62c9edcf977cce3aa231f-
+pyparsing==2.2.0
+python-dateutil==2.6.1
+pytz==2017.3
+six==1.11.0
+termcolor==1.1.0
+tornado==4.5.3
