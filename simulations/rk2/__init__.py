@@ -1,5 +1,4 @@
 import numpy as np
-from csv import DictWriter
 
 from .. import Simulation
 from ..constants import MASS_SUN, G
@@ -15,13 +14,20 @@ def calc_k(pos, vel, dt, M=MASS_SUN):
     :return:
     """
 
+    ssq = np.sum(pos ** 2)
+    sqrt_ssq = np.sqrt(ssq)
+
     def calc_k_vel(numer):
-        ssq = np.sum(pos ** 2)
-        return (-G * M) * numer * dt / (ssq * np.sqrt(ssq))
+        """
+        Todo: make into lambda function and use np to apply to each
+        :param numer:
+        :return:
+        """
+        return (-G * M * numer * dt) / (ssq * sqrt_ssq)
 
     k_pos = vel * dt
     # Do the same calculations for x and y position in velocity
-    k_vel  = np.array([calc_k_vel(pos[0]), calc_k_vel(pos[1])])
+    k_vel = np.array([calc_k_vel(pos[0]), calc_k_vel(pos[1])])
     return k_pos, k_vel
 
 
@@ -61,8 +67,8 @@ class RKSimulation(Simulation):
                 k_vel += k_vel_next
 
             # Update the variables to new values
-            self.position += (1 / self.k) * (np.sum(k_pos_arr))  # Todo: calculate real 1/(c * k) function
-            self.velocity += (1 / self.k) * (np.sum(k_vel_arr))
+            self.position += (1 / self.k) * (k_pos_arr.sum(axis=0))  # Todo: calculate real 1/(c * k) function
+            self.velocity += (1 / self.k) * (k_vel_arr.sum(axis=0))
 
             # Record the iteration
             self.write_row(outfile)

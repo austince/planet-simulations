@@ -16,6 +16,9 @@ class Simulation(metaclass=ABCMeta):
             writer = self.get_csv_writer(csvfile)
             writer.writeheader()
 
+    def get_key_index(self, key):
+        return self.fieldnames.index(key)
+
     @abstractmethod
     def write_row(self, outfile):
         pass

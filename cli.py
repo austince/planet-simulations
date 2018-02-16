@@ -133,6 +133,7 @@ def main():
     cprint('Simulation done.', 'green')
 
     if args.plot:
+        # Could be made into it's own module / function
         cprint('Plotting results...', 'yellow')
         import matplotlib.pyplot as plt
         import numpy as np
@@ -140,8 +141,8 @@ def main():
         title = '%s for %.1f days. dt = %.2f days' % (args.method, args.end_time, args.dt)
 
         data = np.loadtxt(open(args.output, 'rb'), delimiter=',', skiprows=1)
-        x = data[:, 1]
-        y = data[:, 2]
+        x = data[:, sim.get_key_index('x')]
+        y = data[:, sim.get_key_index('y')]
 
         # Convert to polar
         r, theta = cart_to_pol(x, y)
