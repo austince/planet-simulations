@@ -22,3 +22,11 @@ Here's a full example that runs a *RK4* simulation for *5 years* with a
 time delta of *0.5 days* and plots it. 
 
 `python cli.py -dt 0.5 --end-time 1825 --method rk4 --output rk4_dt=0.5_end=1825.csv --plot`
+
+
+## Examples
+
+RK4
+![](./examples/rk4_dt=0.5_end=1825.png)
+
+![](./examples/rk4_dt=5_end=1825.png)
