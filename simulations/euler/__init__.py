@@ -6,6 +6,8 @@ from ..constants import G, MASS_SUN
 """
 Simple motion and energy functions
 """
+
+
 def acceleration(pos_i, r_i):
     return pos_i * (-G * MASS_SUN / (r_i ** 3))
 
@@ -50,23 +52,23 @@ class EulerSimulation(Simulation):
         self.acceleration = acceleration(self.position, self.radius)
         self.total_energy = total_energy(self.velocity, self.radius)
 
-    def run(self, outfile):
-        self.prepare_file(outfile)
-        self.write_row(outfile)
+    def run(self, outfile_path):
+        self.prepare_file(outfile_path)
+        self.write_row(outfile_path)
         while self.time < self.end_time:
             self.time += self.dt
 
             self.position = position(self.position, self.velocity, self.acceleration, self.dt)
             self.radius = radius(self.position)
             self.velocity = velocity(self.velocity, self.acceleration, self.dt)
-            
+
             self.acceleration = acceleration(self.position, self.radius)
 
             self.total_energy = total_energy(self.velocity, self.radius)
-            self.write_row(outfile)
+            self.write_row(outfile_path)
 
-    def write_row(self, outfile):
-        with open(outfile, 'a') as csvfile:
+    def write_row(self, outfile_path):
+        with open(outfile_path, 'a') as csvfile:
             writer = self.get_csv_writer(csvfile)
             writer.writerow({
                 'time': self.time,

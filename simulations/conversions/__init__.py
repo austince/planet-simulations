@@ -21,7 +21,7 @@ def day_to_sec(day):
 
 # From: https://stackoverflow.com/questions/20924085/python-conversion-between-coordinates
 def cart_to_pol(x, y):
-    rho = np.sqrt(x**2 + y**2)
+    rho = np.sqrt(x ** 2 + y ** 2)
     phi = np.arctan2(y, x)
     return rho, phi
 

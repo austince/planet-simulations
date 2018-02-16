@@ -155,7 +155,6 @@ def main():
         polar_ax.grid(True)
         polar_ax.set_title(title)
 
-
         # cartesian plot
         # cart_ax = plt.subplot(111)
         # cart_ax.plot(x, y)

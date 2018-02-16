@@ -47,6 +47,14 @@ class RKSimulation(Simulation):
         self.end_time = end_time
         self.k = k
         self.time = 0
+        # Hardcode order weights for now
+        # will do n-th order sometime maybe
+        if k == 2:
+            self.sum_weights = [1, 1]
+            self.sum_coeff = 1 / 2
+        elif k == 4:
+            self.sum_weights = [1, 2, 2, 1]
+            self.sum_coeff = 1 / 6
 
     def run(self, outfile):
         self.prepare_file(outfile)
@@ -63,12 +71,12 @@ class RKSimulation(Simulation):
                 k_pos_arr[i] = k_pos_next
                 k_vel_arr[i] = k_vel_next
 
-                k_pos += k_pos_next
-                k_vel += k_vel_next
+                k_pos += (k_pos_next / self.sum_weights[i])
+                k_vel += (k_vel_next / self.sum_weights[i])
 
             # Update the variables to new values
-            self.position += (1 / self.k) * (k_pos_arr.sum(axis=0))  # Todo: calculate real 1/(c * k) function
-            self.velocity += (1 / self.k) * (k_vel_arr.sum(axis=0))
+            self.position += self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0))
+            self.velocity += self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0))
 
             # Record the iteration
             self.write_row(outfile)
@@ -83,4 +91,3 @@ class RKSimulation(Simulation):
                 'v_x': self.velocity[0],
                 'v_y': self.velocity[1],
             })
-
