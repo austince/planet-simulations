@@ -17,17 +17,8 @@ def calc_k(pos, vel, dt, M=MASS_SUN):
     ssq = np.sum(pos ** 2)
     sqrt_ssq = np.sqrt(ssq)
 
-    def calc_k_vel(numer):
-        """
-        Todo: make into lambda function and use np to apply to each
-        :param numer:
-        :return:
-        """
-        return (-G * M * numer * dt) / (ssq * sqrt_ssq)
-
     k_pos = vel * dt
-    # Do the same calculations for x and y position in velocity
-    k_vel = np.array([calc_k_vel(pos[0]), calc_k_vel(pos[1])])
+    k_vel = pos * (-G * M * dt) / (ssq * sqrt_ssq)
     return k_pos, k_vel
 
 

@@ -5,7 +5,7 @@ import argparse
 from termcolor import cprint
 
 from simulations.euler import EulerSimulation
-from simulations.rk2 import RKSimulation
+from simulations.runge_kutta import RKSimulation
 from simulations.conversions import au_to_m, day_to_sec, cart_to_pol
 
 __version__ = '2.0.0'
