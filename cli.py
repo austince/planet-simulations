@@ -4,10 +4,21 @@ The command line interface
 import argparse
 from termcolor import cprint
 
-from simulations.euler import Simulation
-from simulations.conversions import au_to_km, day_to_sec
+from simulations.euler import EulerSimulation
+from simulations.rk2 import RKSimulation
+from simulations.conversions import au_to_m, day_to_sec
 
-__version__ = '1.0.0'
+__version__ = '2.0.0'
+
+
+class DaysToSecsAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values)
+
+
+class AUToMAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values)
 
 
 def main():
@@ -21,12 +32,14 @@ def main():
                         help='Time delta. (days)',
                         type=float,
                         default=1,
+                        action=DaysToSecsAction,
                         )
 
     parser.add_argument('-et', '--end-time',
                         help='End time for the simulation. (days)',
                         type=float,
                         default=1825,
+                        action=DaysToSecsAction,
                         )
 
     parser.add_argument('-y0',
@@ -61,24 +74,77 @@ def main():
 
     parser.add_argument('-m', '--method',
                         help='Method for the simulation.',
-                        choices=['euler', 'e', 'rk2', 'rk4'],
+                        choices=['euler', 'rk2', 'rk4'],
                         default='euler',
                         type=str
                         )
 
+    parser.add_argument('-p', '--plot',
+                        help='Plot the results?',
+                        action='store_true',
+                        default=False,
+                        # type=bool
+                        )
+
+    # rk_args_group = parser.add_argument_group('RK Method')
+    # rk_args_group.add_argument('-n', '-num-divisions',
+    #                            help='Number of subdivisions.',
+    #                            choices=[2, 4],
+    #                            default=2,
+    #                            type=int
+    #                            )
+
     args = parser.parse_args()
 
     cprint('Starting simulation.', 'white')
-    sim = Simulation(
-        au_to_km(args.x0) * 1000,
-        au_to_km(args.y0) * 1000,
-        args.vx0 * 1000,
-        args.vy0 * 1000,
-        day_to_sec(args.dt),
-        day_to_sec(args.end_time),
-    )
+
+    sim = None
+    if args.method == 'euler':
+        sim = EulerSimulation(
+            au_to_m(args.x0),
+            au_to_m(args.y0),
+            args.vx0 * 1000,
+            args.vy0 * 1000,
+            day_to_sec(args.dt),
+            day_to_sec(args.end_time),
+        )
+    elif args.method == 'rk2':
+        sim = RKSimulation(
+            au_to_m(args.x0),
+            au_to_m(args.y0),
+            args.vx0 * 1000,
+            args.vy0 * 1000,
+            day_to_sec(args.dt),
+            day_to_sec(args.end_time),
+            k=2,
+        )
+    elif args.method == 'rk4':
+        sim = RKSimulation(
+            au_to_m(args.x0),
+            au_to_m(args.y0),
+            args.vx0 * 1000,
+            args.vy0 * 1000,
+            day_to_sec(args.dt),
+            day_to_sec(args.end_time),
+            k=4,
+        )
+
     sim.run(args.output)
     cprint('Simulation done.', 'green')
+
+    if args.plot:
+        cprint('Plotting results...', 'yellow')
+        import matplotlib.pyplot as plt
+        import numpy as np
+        data = np.loadtxt(open(args.output, 'rb'), delimiter=',', skiprows=1)
+        x = data[:, 1]
+        y = data[:, 2]
+        plt.plot(x, y)
+        plt.title('%s for %.1f days. dt = %.2f days' % (args.method, args.end_time, args.dt))
+        plt.xlabel('X position')
+        plt.ylabel('Y position')
+        plt.axis([np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.show()
 
 
 if __name__ == '__main__':

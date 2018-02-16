@@ -1,10 +1,44 @@
-from csv import DictWriter
 import numpy as np
 
-from ..simple_motion import acceleration, velocity, position, radius, total_energy
+from .. import Simulation
+from ..constants import G, MASS_SUN
+
+"""
+Simple motion and energy functions
+"""
+def acceleration(pos_i, r_i):
+    return pos_i * (-G * MASS_SUN / (r_i ** 3))
 
 
-class Simulation:
+def velocity(v_i, a_i, dt):
+    return v_i + (a_i * dt)
+
+
+def position(pos_i, v_i, a_i, dt):
+    return pos_i + (v_i * dt) + (0.5 * a_i * (dt ** 2))
+
+
+def radius(pos_i):
+    return np.sqrt(np.sum(np.square(pos_i)))
+
+
+def total_energy(v_i, r_i):
+    return 0.5 * (np.sqrt(v_i.dot(v_i)) ** 2) - (G * MASS_SUN / r_i)
+
+
+class EulerSimulation(Simulation):
+    fieldnames = [
+        'time',
+        'x',
+        'y',
+        'radius',
+        'v_x',
+        'v_y',
+        'a_x',
+        'a_y',
+        'total_energy'
+    ]
+
     def __init__(self, x0, y0, vx0, vy0, dt, end_time):
         self.pos = np.array([x0, y0])
         self.velocity = np.array([vx0, vy0])
@@ -29,27 +63,6 @@ class Simulation:
 
             self.total_energy = total_energy(self.velocity, self.radius)
             self.write_row(outfile)
-
-
-    @staticmethod
-    def get_csv_writer(csvfile):
-        fieldnames = [
-            'time',
-            'x',
-            'y',
-            'radius',
-            'v_x',
-            'v_y',
-            'a_x',
-            'a_y',
-            'total_energy'
-        ]
-        return DictWriter(csvfile, fieldnames=fieldnames)
-
-    def prepare_file(self, outfile):
-        with open(outfile, 'w') as csvfile:
-            writer = self.get_csv_writer(csvfile)
-            writer.writeheader()
 
     def write_row(self, outfile):
         with open(outfile, 'a') as csvfile:

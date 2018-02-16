@@ -1,0 +1,25 @@
+from csv import DictWriter, DictReader
+from abc import abstractmethod
+
+
+class Simulation:
+    fieldnames = []
+
+    def get_csv_reader(self, csvfile):
+        return DictReader(csvfile, fieldnames=self.fieldnames)
+
+    def get_csv_writer(self, csvfile):
+        return DictWriter(csvfile, fieldnames=self.fieldnames)
+
+    def prepare_file(self, outfile):
+        with open(outfile, 'w') as csvfile:
+            writer = self.get_csv_writer(csvfile)
+            writer.writeheader()
+
+    @abstractmethod
+    def write_row(self, outfile):
+        pass
+
+    @abstractmethod
+    def run(self, outfile):
+        pass
