@@ -40,14 +40,14 @@ class EulerSimulation(Simulation):
     ]
 
     def __init__(self, x0, y0, vx0, vy0, dt, end_time):
-        self.pos = np.array([x0, y0])
+        self.position = np.array([x0, y0])
         self.velocity = np.array([vx0, vy0])
         self.dt = dt
         self.end_time = end_time
 
         self.time = 0
-        self.radius = radius(self.pos)
-        self.acceleration = acceleration(self.pos, self.radius)
+        self.radius = radius(self.position)
+        self.acceleration = acceleration(self.position, self.radius)
         self.total_energy = total_energy(self.velocity, self.radius)
 
     def run(self, outfile):
@@ -56,10 +56,11 @@ class EulerSimulation(Simulation):
         while self.time < self.end_time:
             self.time += self.dt
 
-            self.radius = radius(self.pos)
-            self.acceleration = acceleration(self.pos, self.radius)
+            self.position = position(self.position, self.velocity, self.acceleration, self.dt)
+            self.radius = radius(self.position)
             self.velocity = velocity(self.velocity, self.acceleration, self.dt)
-            self.pos = position(self.pos, self.velocity, self.acceleration, self.dt)
+            
+            self.acceleration = acceleration(self.position, self.radius)
 
             self.total_energy = total_energy(self.velocity, self.radius)
             self.write_row(outfile)
@@ -69,8 +70,8 @@ class EulerSimulation(Simulation):
             writer = self.get_csv_writer(csvfile)
             writer.writerow({
                 'time': self.time,
-                'x': self.pos[0],
-                'y': self.pos[1],
+                'x': self.position[0],
+                'y': self.position[1],
                 'radius': self.radius,
                 'v_x': self.velocity[0],
                 'v_y': self.velocity[1],

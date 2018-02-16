@@ -6,7 +6,7 @@ from termcolor import cprint
 
 from simulations.euler import EulerSimulation
 from simulations.rk2 import RKSimulation
-from simulations.conversions import au_to_m, day_to_sec
+from simulations.conversions import au_to_m, day_to_sec, cart_to_pol
 
 __version__ = '2.0.0'
 
@@ -136,14 +136,32 @@ def main():
         cprint('Plotting results...', 'yellow')
         import matplotlib.pyplot as plt
         import numpy as np
+
+        title = '%s for %.1f days. dt = %.2f days' % (args.method, args.end_time, args.dt)
+
         data = np.loadtxt(open(args.output, 'rb'), delimiter=',', skiprows=1)
         x = data[:, 1]
         y = data[:, 2]
-        plt.plot(x, y)
-        plt.title('%s for %.1f days. dt = %.2f days' % (args.method, args.end_time, args.dt))
-        plt.xlabel('X position')
-        plt.ylabel('Y position')
-        plt.axis([np.min(x), np.max(x), np.min(y), np.max(y)])
+
+        # Convert to polar
+        r, theta = cart_to_pol(x, y)
+
+        # polar plot
+        polar_ax = plt.subplot(111, projection='polar')
+        polar_ax.plot(theta, r)
+        polar_ax.set_rmax(np.max(r))
+        polar_ax.grid(True)
+        polar_ax.set_title(title)
+
+
+        # cartesian plot
+        # cart_ax = plt.subplot(111)
+        # cart_ax.plot(x, y)
+        # cart_ax.set_title(title)
+        # cart_ax.xlabel('X position')
+        # cart_ax.ylabel('Y position')
+        # cart_ax.axis([np.min(x), np.max(x), np.min(y), np.max(y)])
+
         plt.show()
 
 
