@@ -19,7 +19,10 @@ def calc_k(pos, vel, dt, M=MASS_SUN):
     sqrt_ssq = np.sqrt(ssq)
 
     k_pos = vel * dt
-    k_vel = pos * (-G * M * dt) / (ssq * sqrt_ssq)
+    # k_vel = pos * (-G * M * dt) / (ssq * sqrt_ssq)
+    k_vel = np.ndarray(shape=(2,))
+    k_vel[0] = pos[0] * (-G * M * dt) / (ssq * sqrt_ssq)
+    k_vel[1] = pos[1] * (-G * M * dt) / (ssq * sqrt_ssq)
     return k_pos, k_vel
 
 
@@ -57,21 +60,21 @@ class RKSimulation(Simulation):
         while self.time < self.end_time:
             self.time += self.dt
 
-            k_vel_arr = np.ndarray(shape=(self.order, 2))  # x and y direction
-            k_pos_arr = np.ndarray(shape=(self.order, 2))  # x and y direction
-            k_pos, k_vel = self.position, self.velocity
+            k_vel_arr = np.ndarray(shape=(self.order, 2))  # 2d for x and y direction
+            k_pos_arr = np.ndarray(shape=(self.order, 2))  # 2d for x and y direction
+            k_pos, k_vel = self.position.copy(), self.velocity.copy()
 
             for i in range(self.order):
                 k_pos_next, k_vel_next = calc_k(k_pos, k_vel, self.dt)
-                k_pos_arr[i] = k_pos_next
-                k_vel_arr[i] = k_vel_next
+                k_pos_arr[i] = k_pos_next.copy()
+                k_vel_arr[i] = k_vel_next.copy()
 
-                k_pos += (k_pos_next / self.sum_weights[i])
-                k_vel += (k_vel_next / self.sum_weights[i])
+                k_pos = self.position + (k_pos_next / self.sum_weights[i])
+                k_vel = self.velocity + (k_vel_next / self.sum_weights[i])
 
             # Update the variables to new values
-            self.position += self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0))
-            self.velocity += self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0))
+            self.position = self.position + self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0))
+            self.velocity = self.velocity + self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0))
 
             # For sanity checks
             self.total_energy = total_energy(self.velocity, self.position)

@@ -8,5 +8,9 @@ def radius(position):
 
 
 def total_energy(velocity, position, M=MASS_SUN):
+    r = radius(position)
+    if r == 0:
+        return 0
+
     return 0.5 * (np.sqrt(velocity.dot(velocity)) ** 2) - (G * M / radius(position))
 

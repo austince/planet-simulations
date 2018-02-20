@@ -150,7 +150,8 @@ def main():
         # polar plot
         polar_ax = plt.subplot(111, projection='polar')
         polar_ax.plot(theta, r)
-        polar_ax.set_rmin(np.min(r))
+        # polar_ax.set_rmin(np.min(r))
+        polar_ax.set_rmin(0)
         polar_ax.set_rmax(np.max(r))
         polar_ax.grid(True)
         polar_ax.set_title(title)
