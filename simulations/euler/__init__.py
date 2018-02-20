@@ -2,6 +2,7 @@ import numpy as np
 
 from .. import Simulation
 from ..constants import G, MASS_SUN
+from ..utils import radius, total_energy
 
 """
 Simple motion and energy functions
@@ -18,14 +19,6 @@ def velocity(v_i, a_i, dt):
 
 def position(pos_i, v_i, a_i, dt):
     return pos_i + (v_i * dt) + (0.5 * a_i * (dt ** 2))
-
-
-def radius(pos_i):
-    return np.sqrt(np.sum(np.square(pos_i)))
-
-
-def total_energy(v_i, r_i):
-    return 0.5 * (np.sqrt(v_i.dot(v_i)) ** 2) - (G * MASS_SUN / r_i)
 
 
 class EulerSimulation(Simulation):
@@ -50,7 +43,7 @@ class EulerSimulation(Simulation):
         self.time = 0
         self.radius = radius(self.position)
         self.acceleration = acceleration(self.position, self.radius)
-        self.total_energy = total_energy(self.velocity, self.radius)
+        self.total_energy = total_energy(self.velocity, self.position)
 
     def run(self, outfile_path):
         self.prepare_file(outfile_path)

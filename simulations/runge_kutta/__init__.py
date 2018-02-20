@@ -2,6 +2,7 @@ import numpy as np
 
 from .. import Simulation
 from ..constants import MASS_SUN, G
+from ..utils import radius, total_energy
 
 
 def calc_k(pos, vel, dt, M=MASS_SUN):
@@ -29,6 +30,7 @@ class RKSimulation(Simulation):
         'y',
         'v_x',
         'v_y',
+        'total_energy',
     ]
 
     def __init__(self, x0, y0, vx0, vy0, dt, end_time, order=2):
@@ -38,6 +40,8 @@ class RKSimulation(Simulation):
         self.end_time = end_time
         self.order = order
         self.time = 0
+        self.total_energy = total_energy(self.velocity, self.position)
+
         # Hardcode order weights for now
         # will do n-th order sometime maybe
         if order == 2:
@@ -69,6 +73,9 @@ class RKSimulation(Simulation):
             self.position += self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0))
             self.velocity += self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0))
 
+            # For sanity checks
+            self.total_energy = total_energy(self.velocity, self.position)
+
             # Record the iteration
             self.write_row(outfile)
 
@@ -81,4 +88,5 @@ class RKSimulation(Simulation):
                 'y': self.position[1],
                 'v_x': self.velocity[0],
                 'v_y': self.velocity[1],
+                'total_energy': self.total_energy,
             })
