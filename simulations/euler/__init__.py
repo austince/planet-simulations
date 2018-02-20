@@ -57,7 +57,7 @@ class EulerSimulation(Simulation):
 
             self.acceleration = acceleration(self.position, self.radius)
 
-            self.total_energy = total_energy(self.velocity, self.radius)
+            self.total_energy = total_energy(self.velocity, self.position)
             self.write_row(outfile_path)
 
     def write_row(self, outfile_path):
