@@ -26,7 +26,7 @@ time delta of *0.5 days* and plots it.
 
 ## Examples
 
-Euler  
+### Euler  
 ![](./examples/euler_dt=0.1_end=1825.csvpolyplot.png)  
 
 ![](./examples/euler_dt=0.5_end=1825.csvpolyplot.png)  
@@ -37,7 +37,7 @@ Euler
 
 ![](./examples/euler_dt=5_end=1825.csvpolyplot.png)
 
-RK2  
+### RK2  
 ![](./examples/rk2_dt=0.1_end=1825.csvpolyplot.png)  
 
 ![](./examples/rk2_dt=0.5_end=1825.csvpolyplot.png)
@@ -48,7 +48,7 @@ RK2
 
 ![](./examples/rk2_dt=5_end=1825.csvpolyplot.png)
 
-RK4
+### RK4  
 ![](./examples/rk4_dt=0.1_end=1825.csvpolyplot.png)  
 
 ![](./examples/rk4_dt=0.5_end=1825.csvpolyplot.png)
