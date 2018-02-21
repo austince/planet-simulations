@@ -52,8 +52,7 @@ class RKSimulation(Simulation):
             self.sum_coeff = 1 / 2
         elif order == 4:
             self.sum_weights = np.array([1, 2, 2, 1])[:, np.newaxis]
-            # self.sum_coeff = 1 / 6
-            self.sum_coeff = 1 / 2
+            self.sum_coeff = 1 / 6
 
     def run(self, outfile):
         self.prepare_file(outfile)
