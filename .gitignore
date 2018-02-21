@@ -1,5 +1,12 @@
 *.csv
 !examples/*.csv
+
+*.png
+!examples/*.png
+
+# All lock files
+.~lock*
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files
@@ -47,7 +54,7 @@ target/
 
 # Environments
 .env
-.venv
+.venvPlotting results
 env/
 venv/
 ENV/
