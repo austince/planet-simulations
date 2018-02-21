@@ -26,7 +26,35 @@ time delta of *0.5 days* and plots it.
 
 ## Examples
 
-RK4
-![](./examples/rk4_dt=0.5_end=1825.png)
+Euler  
+![](./examples/euler_dt=0.1_end=1825.csvpolyplot.png)  
 
-![](./examples/rk4_dt=5_end=1825.png)
+![](./examples/euler_dt=0.5_end=1825.csvpolyplot.png)  
+
+![](./examples/euler_dt=1_end=1825.csvpolyplot.png)  
+
+![](./examples/euler_dt=2.5_end=1825.csvpolyplot.png)
+
+![](./examples/euler_dt=5_end=1825.csvpolyplot.png)
+
+RK2  
+![](./examples/rk2_dt=0.1_end=1825.csvpolyplot.png)  
+
+![](./examples/rk2_dt=0.5_end=1825.csvpolyplot.png)
+
+![](./examples/rk2_dt=1_end=1825.csvpolyplot.png)  
+
+![](./examples/rk2_dt=2.5_end=1825.csvpolyplot.png)
+
+![](./examples/rk2_dt=5_end=1825.csvpolyplot.png)
+
+RK4
+![](./examples/rk4_dt=0.1_end=1825.csvpolyplot.png)  
+
+![](./examples/rk4_dt=0.5_end=1825.csvpolyplot.png)
+
+![](./examples/rk4_dt=1_end=1825.csvpolyplot.png)  
+
+![](./examples/rk4_dt=2.5_end=1825.csvpolyplot.png)
+
+![](./examples/rk4_dt=5_end=1825.csvpolyplot.png)

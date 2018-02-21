@@ -22,12 +22,11 @@ class AUToMAction(argparse.Action):
         setattr(namespace, self.dest, values)
 
 
-
-
 def main():
     """The exported main function
-        :return: 
-        """
+    :return:
+    """
+
     parser = argparse.ArgumentParser(description='Project 1 Simulation for PEP 336')
     parser.add_argument('-v', '--version', action='version', version=__version__)
 
@@ -89,7 +88,7 @@ def main():
                             default=False,
                             )
 
-    plot_group.add_argument('-sp', '--save_plot',
+    plot_group.add_argument('-sp', '--save-plot',
                             help='Save the plotted results?',
                             action='store_true',
                             default=False,
