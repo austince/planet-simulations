@@ -52,7 +52,8 @@ class RKSimulation(Simulation):
             self.sum_coeff = 1 / 2
         elif order == 4:
             self.sum_weights = np.array([1, 2, 2, 1])[:, np.newaxis]
-            self.sum_coeff = 1 / 6
+            # self.sum_coeff = 1 / 6
+            self.sum_coeff = 1 / 2
 
     def run(self, outfile):
         self.prepare_file(outfile)
@@ -69,12 +70,12 @@ class RKSimulation(Simulation):
                 k_pos_arr[i] = k_pos_next.copy()
                 k_vel_arr[i] = k_vel_next.copy()
 
-                k_pos = self.position + (k_pos_next / self.sum_weights[i])
-                k_vel = self.velocity + (k_vel_next / self.sum_weights[i])
+                k_pos = self.position + (k_pos_next / self.sum_weights[i][0])
+                k_vel = self.velocity + (k_vel_next / self.sum_weights[i][0])
 
             # Update the variables to new values
-            self.position = self.position + self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0))
-            self.velocity = self.velocity + self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0))
+            self.position = self.position + (self.sum_coeff * ((k_pos_arr * self.sum_weights).sum(axis=0)))
+            self.velocity = self.velocity + (self.sum_coeff * ((k_vel_arr * self.sum_weights).sum(axis=0)))
 
             # For sanity checks
             self.total_energy = total_energy(self.velocity, self.position)

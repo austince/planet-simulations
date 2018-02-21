@@ -1,9 +1,10 @@
 from csv import DictWriter, DictReader
-from abc import abstractmethod, ABCMeta
+from abc import abstractmethod, abstractproperty, ABCMeta
 
 
 class Simulation(metaclass=ABCMeta):
     fieldnames = []
+    method = ''
 
     def get_csv_reader(self, csvfile):
         return DictReader(csvfile, fieldnames=self.fieldnames)

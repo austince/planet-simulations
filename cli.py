@@ -6,7 +6,8 @@ from termcolor import cprint
 
 from simulations.euler import EulerSimulation
 from simulations.runge_kutta import RKSimulation
-from simulations.conversions import au_to_m, day_to_sec, cart_to_pol
+from simulations.conversions import au_to_m, day_to_sec
+from simulations.plotting import plot_results
 
 __version__ = '2.0.0'
 
@@ -19,6 +20,8 @@ class DaysToSecsAction(argparse.Action):
 class AUToMAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
+
+
 
 
 def main():
@@ -79,20 +82,18 @@ def main():
                         type=str
                         )
 
-    parser.add_argument('-p', '--plot',
-                        help='Plot the results?',
-                        action='store_true',
-                        default=False,
-                        # type=bool
-                        )
+    plot_group = parser.add_argument_group('Plotting')
+    plot_group.add_argument('-p', '--plot',
+                            help='Plot the results?',
+                            action='store_true',
+                            default=False,
+                            )
 
-    # rk_args_group = parser.add_argument_group('RK Method')
-    # rk_args_group.add_argument('-n', '-num-divisions',
-    #                            help='Number of subdivisions.',
-    #                            choices=[2, 4],
-    #                            default=2,
-    #                            type=int
-    #                            )
+    plot_group.add_argument('-sp', '--save_plot',
+                            help='Save the plotted results?',
+                            action='store_true',
+                            default=False,
+                            )
 
     args = parser.parse_args()
 
@@ -132,40 +133,19 @@ def main():
     sim.run(args.output)
     cprint('Simulation done.', 'green')
 
-    if args.plot:
-        # Could be made into it's own module / function
+    if args.plot or args.save_plot:
         cprint('Plotting results...', 'yellow')
-        import matplotlib.pyplot as plt
-        import numpy as np
-
         title = '%s for %.1f days. dt = %.2f days' % (args.method, args.end_time, args.dt)
-
-        data = np.loadtxt(open(args.output, 'rb'), delimiter=',', skiprows=1)
-        x = data[:, sim.get_key_index('x')]
-        y = data[:, sim.get_key_index('y')]
-
-        # Convert to polar
-        r, theta = cart_to_pol(x, y)
-
-        # polar plot
-        polar_ax = plt.subplot(111, projection='polar')
-        polar_ax.plot(theta, r)
-        # polar_ax.set_rmin(np.min(r))
-        polar_ax.set_rmin(0)
-        polar_ax.set_rmax(np.max(r))
-        polar_ax.grid(True)
-        polar_ax.set_title(title)
-
-        # cartesian plot
-        # cart_ax = plt.subplot(111)
-        # cart_ax.plot(x, y)
-        # cart_ax.set_title(title)
-        # cart_ax.set_xlabel('X position')
-        # cart_ax.set_ylabel('Y position')
-        # cart_ax.grid(True)
-        # cart_ax.axis([np.min(x), np.max(x), np.min(y), np.max(y)])
-
-        plt.show()
+        poly, cart = plot_results(sim, title, args.output)
+        # poly.show()
+        # cart.show()
+        if args.plot:
+            import matplotlib.pyplot as plt
+            plt.show()
+        if args.save_plot:
+            cprint('Saving plots...', 'yellow')
+            poly.savefig(args.output + 'polyplot.png')
+            cart.savefig(args.output + 'cartplot.png')
 
 
 if __name__ == '__main__':
