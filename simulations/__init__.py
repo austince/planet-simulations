@@ -1,5 +1,5 @@
 from csv import DictWriter, DictReader
-from abc import abstractmethod, abstractproperty, ABCMeta
+from abc import abstractmethod, ABCMeta
 
 
 class Simulation(metaclass=ABCMeta):
